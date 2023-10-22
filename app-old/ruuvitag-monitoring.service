@@ -1,0 +1,20 @@
+[Unit]
+Description=RuuviTag monitoring with AWS IoT and CloudWatch
+After=network.target
+StartLimitIntervalSec=0
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+User=ruuvi
+Environment="PATH=$PATH:/home/ruuvi/.nvm/versions/node/v18.18.2/bin"
+WorkingDirectory=/home/ruuvi/ruuvitag-aws-iot-monitoring/app-old
+ExecStart=npx ts-node main \
+  --privateKey=../keys/RaspberryPi.private.key \
+  --clientCert=../keys/RaspberryPi.cert.pem \
+  --caCert=../keys/AmazonRootCA1.pem \
+  --host-name=1234567890abcd-ats.iot.region.amazonaws.com \
+  --clientId=RaspberryPi
+
+[Install]
+WantedBy=multi-user.target
