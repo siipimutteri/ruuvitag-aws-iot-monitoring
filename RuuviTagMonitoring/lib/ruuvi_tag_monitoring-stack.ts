@@ -34,6 +34,9 @@ export class RuuviTagMonitoringStack extends cdk.Stack {
         onCreate: {
           service: "@aws-sdk/client-iot",
           action: "CreateKeysAndCertificateCommand",
+          parameters: {
+            setAsActive: true,
+          },
           physicalResourceId:
             cr.PhysicalResourceId.fromResponse("certificateId"),
           outputPaths: [

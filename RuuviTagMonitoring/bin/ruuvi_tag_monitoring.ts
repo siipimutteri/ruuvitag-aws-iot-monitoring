@@ -12,5 +12,5 @@ new RuuviTagMonitoringStack(app, 'RuuviTagMonitoringStack', {
   thingName: 'RaspberryPi',
   iotTopicPrefix: 'ruuvitag',
   cloudWatchMetricNameSpace: 'RuuviTag',
-  ruuviTagId: 'f3d619998f39',
+  ruuviTagId: 'f3d619998f38',
 });
