@@ -3,6 +3,8 @@ const deviceModule = require('aws-iot-device-sdk').device;
 const cmdLineProcess = require('aws-iot-device-sdk/examples/lib/cmdline');
 
 const awsIotTopicPrefix = 'ruuvitag/';
+const ruuviId = '0123456789ab';
+
 
 interface RuuviTag {
   id: string;
@@ -51,29 +53,33 @@ function startRuuvitagListener(args: any) {
   });
 
   ruuvi.on('found', (tag: RuuviTag) => {
-    console.log('RuuviTag found ' + tag.id);
+    //console.log('RuuviTag found ' + tag.id);
     tag.on('updated', (data: RuuviData) => {
-      if (eventCounter % updateInterval === 0) {
-        console.debug('RuuviTag updated ' + tag.id + ':\n' + JSON.stringify(data, null, '  '));
-        device.publish(awsIotTopicPrefix + tag.id, JSON.stringify(data));
-      } else {
-        process.stdout.write(eventCounter + '/' + updateInterval + '\r');
+      if (tag.id == ruuviId) {
+        if (eventCounter % updateInterval === 0) {
+	  eventCounter=0;
+          //console.debug('RuuviTag updated ' + tag.id + ':\n' + JSON.stringify(data, null, '  '));
+          device.publish(awsIotTopicPrefix + tag.id, JSON.stringify(data));
+          console.debug('RuuviTag updated ' + tag.id);
+        } else {
+          //process.stdout.write(eventCounter + '/' + updateInterval + '\r');
+        }
+        eventCounter++;
       }
-      eventCounter++;
     });
   });
 
   device.on('connect', function () {
-    console.log('connect');
+    //console.log('connect');
   });
   device.on('close', function () {
-    console.log('close');
+    //console.log('close');
   });
   device.on('reconnect', function () {
-    console.log('reconnect');
+    //console.log('reconnect');
   });
   device.on('offline', function () {
-    console.log('offline');
+    //console.log('offline');
   });
   device.on('error', function (error: any) {
     console.error('error', error);

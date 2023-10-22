@@ -14,6 +14,39 @@ interface AwsIotDashboardStackProps {
 }
 
 const createRuuviValueWidgets = (ruuviTagId: string, region: string) => {
+  const humidityGraph = new cw.GraphWidget({
+    left: [ new cw.Metric({
+      namespace: `${RuuviTagMetricNamespacePrefix}/${ruuviTagId}`,
+      metricName: 'Humidity',
+      statistic: 'Average',
+      period: cdk.Duration.minutes(5),
+    })],
+    leftAnnotations: [
+      {
+        value: 53,
+        color: '#ff0000',
+        fill: cw.Shading.BELOW,
+        label: 'Low'
+      },
+      {
+        value: 75,
+        color: '#ff0000',
+        fill: cw.Shading.ABOVE,
+        label: 'High'
+      }
+    ],
+    leftYAxis: {
+      max: 85,
+      min: 45,
+      showUnits: false,
+    },
+    legendPosition: cw.LegendPosition.HIDDEN,
+    region,
+    title: 'Kosteus (%)',
+    width: 6,
+    height: 6,
+  });
+      
   const tempWidget = new cw.SingleValueWidget({
     metrics: [new cw.Metric({
       namespace: `${RuuviTagMetricNamespacePrefix}/${ruuviTagId}`,
@@ -38,9 +71,10 @@ const createRuuviValueWidgets = (ruuviTagId: string, region: string) => {
     width: 6,
     height: 3,
   });
-  return [tempWidget, humidityWidget];
+  //return [tempWidget, humidityWidget];
+  return [humidityGraph];
 }
-
+/*
 const createWeatherValueWidgets = (ruuviTagId: string, region: string) => {
   const tempWidget = new cw.SingleValueWidget({
     metrics: [new cw.Metric({
@@ -136,24 +170,24 @@ const createHumidityGraphWidget = (ruuviTagId: string, region: string) => new cw
     showUnits: false,
   },
 });
-
+*/
 export class AwsIotDashboardStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props: AwsIotDashboardStackProps) {
+   constructor(scope: Construct, id: string, props: AwsIotDashboardStackProps) {
     super(scope, id, props);
 
     const firstRowWidgets = props.ruuviTagIds.flatMap((id) => createRuuviValueWidgets(id, this.region));
-    const secondRowWidgets = props.ruuviTagIds.flatMap((id) => createWeatherValueWidgets(id, this.region));
-    const thirdRowWidgets = props.ruuviTagIds.flatMap((id) => createTempGraphWidget(id, this.region));
-    const fourthRowWidgets = props.ruuviTagIds.flatMap((id) => createHumidityGraphWidget(id, this.region));
+    //const secondRowWidgets = props.ruuviTagIds.flatMap((id) => createWeatherValueWidgets(id, this.region));
+    //const thirdRowWidgets = props.ruuviTagIds.flatMap((id) => createTempGraphWidget(id, this.region));
+    //const fourthRowWidgets = props.ruuviTagIds.flatMap((id) => createHumidityGraphWidget(id, this.region));
 
     new cw.Dashboard(this, 'Dashboard', {
       dashboardName: `${props.thingName}-Dashboard`,
       start: '-P1D', // One day
       widgets: [
         firstRowWidgets,
-        secondRowWidgets,
-        thirdRowWidgets,
-        fourthRowWidgets,
+        //secondRowWidgets,
+        //thirdRowWidgets,
+        //fourthRowWidgets,
       ],
     });
   }

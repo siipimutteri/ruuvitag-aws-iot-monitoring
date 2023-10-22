@@ -1,6 +1,6 @@
 npx ts-node main \
-  --privateKey=../keys/RaspberryPiZeroW.private.key \
-  --clientCert=../keys/RaspberryPiZeroW.cert.pem \
+  --privateKey=../keys/RaspberryPi.private.key \
+  --clientCert=../keys/RaspberryPi.cert.pem \
   --caCert=../keys/AmazonRootCA1.pem \
-  --host-name=a212cfb7mz9p00-ats.iot.eu-west-1.amazonaws.com \
-  --clientId=RaspberryPiZeroW
+  --host-name=1234567890abcd-ats.iot.region.amazonaws.com \
+  --clientId=RaspberryPi

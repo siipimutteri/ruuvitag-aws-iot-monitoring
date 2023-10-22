@@ -1,4 +1,4 @@
 node_modules/
 dist/
 cdk.out/
-*.private.key
+#*.private.key
